@@ -1,0 +1,154 @@
+{% extends 'main_app.html' %}
+{% load static %}
+{% block main_app %}
+<div class="d-flex border-bottom mb-3 mt-3 justify-content-between">
+    <div class="d-flex">
+        <div class="led mb-2"></div>
+        <p class="mb-1">{{now | capfirst}}</p>
+    </div>
+</div>
+<ul class="nav nav-pills mb-3 mt-3" id="pills-tab">
+    <li class="nav-item">
+        <button class="nav-link active btn-sm" data-bs-toggle="pill" data-bs-target="#pills-ajout"  aria-controls="pills-ajout">Enregistrement</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link btn-sm" data-bs-toggle="pill" data-bs-target="#pills-liste" aria-controls="pills-liste">Liste</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-4">
+    <div class="tab-pane fade show active" id="pills-ajout">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mt-4 alert {{message.tags}} text-center message-container">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mt-2">
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="username" class="form-label">Prénom</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="first_name" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="last_name" class="form-label">Post-Nom</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="date" class="form-label">Date de naissance</label>
+                            <input type="date" class="form-control" id="date" name="date_birth" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="mb-2">
+                            <label for="genre" class="form-label">Genre</label>
+                            <select name="sex" id="genre" class="form-control" required>
+                                <option value="">Sélectionner Genre</option>
+                                <option value="masculin">Masculin</option>
+                                <option value="feminin">Feminin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="mb-2">
+                            <label for="phone" class="form-label">Téléphone</label>
+                            <input type="tel" class="form-control" id="phone" name="number_phone" pattern="^\+243[0-9]{9}$" minlength="13" maxlength="13" placeholder="+243XXXXXXXXX" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="mb-2">
+                            <label for="email" class="form-label">email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="exemple@gmail.com" required>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="mb-2">
+                            <label for="address" class="form-label">Adresse</label>
+                            <input type="text" name="address" class="form-control" id="address" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="mb-2">
+                            <label for="promotion" class="form-label">Promation</label>
+                            <select name="promotion" class="form-select" reqruired>
+                                <option value="">Sélectionner</option>
+                                {% for item in promotions %}
+                                    <option value="{{item.uid}}">{{item.name | capfirst}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary w-100 mt-2" type="submit">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-liste" role="tabpanel">
+        <div class="container-fluid">
+            <div class="row">
+                {% for item in etudiants %}
+                <div class="col-12 col-md-3 col-lg-3 col-sm-3 mt-2">
+                    <div class="card" style="width: 14rem; height: 100%;">
+                        <div class="card-body">
+                            <p class="card-title text-center">{{item.userId.username | capfirst}} - {{item.userId.first_name | capfirst}}</p>
+                            <p class="text-center">{{item.number_matricule | capfirst}}</p>
+                            <p class="text-center"><a href="{% url "detailEtudiantAdmin" item.uid %}" class="btn btn-primary">Plus d'infos</a></p>
+                            <p>
+                                <i class="bi bi-pencil-square text-primary float-start icon-modifier" data-bs-toggle="modal" data-bs-target="#modifier{{item.uid}}"></i>
+                                <i class="bi bi-trash3-fill text-danger float-end icon-supprimer" data-bs-toggle="modal" data-bs-target="#supprimer{{item.uid}}"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modifier{{item.uid}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <i class="bi bi-exclamation-circle icon-modalSupprimer"></i>
+                        <p class="message-modal mb-3">Êtes-vous sûr de vouloir modifier ?</p>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quitter</button>
+                          <a href="{% url 'updateEtudiantAdmin' item.uid %}" class='btn btn-danger'>Oui</a>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="supprimer{{item.uid}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <i class="bi bi-exclamation-circle icon-modalSupprimer"></i>
+                        <p class="message-modal mb-3">Êtes-vous sûr de vouloir supprimer ?</p>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quitter</button>
+                          <a href="{% url 'deleteEtudiantAdmin' item.uid %}" class='btn btn-danger'>Oui</a>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:4 %}
+            </div>
+            <div class="row">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_app %}
+    

@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block main %}
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 fs-6 px-3" href="{% url "chatEtudiant" %}"> Live-Chat Student</a>
+    <div class="dropdown account">
+        <button class="btn dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mon compte
+        </button>
+        <ul class="dropdown-menu">
+            <li class="dropdown-item">Agent : {{request.user.username}}</li>
+            <li> <a href="{% url 'disconnect' %}" class="nav-link dropdown-item"><i class="bi bi-box-arrow-left"></i> Déconnexion</a></li>
+        </ul>
+    </div>
+    <button class="navbar-toggler position-absolute d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</header>
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    {% for objet in users %}
+                        <li class="nav-item border-bottom border-top">
+                            <a href="{% url 'discutionEtudiant' objet.id %}" class="nav-link">
+                                <i class="bi bi-person-circle"></i> {{objet.username | capfirst}} {{objet.first_name | capfirst}} {{objet.last_name | capfirst}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                </div>
+            </nav>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex border-bottom mb-3 mt-3 justify-content-between">
+                    <div class="d-flex">
+                        <div class="led mb-2"></div>
+                        <p class='mb-1'>{{now|capfirst}}</p>
+                    </div>
+                </div>
+                <div class="contaimer center-div">
+                    <img src="{% static 'image/chat.png' %}" class='img-fluid'>
+                    <p class='text-center'>Démarrer une discussion</p>
+                </div>
+            </main>
+        </div>
+    </div>
+{% endblock main %}
+    

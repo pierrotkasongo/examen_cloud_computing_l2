@@ -1,0 +1,55 @@
+{% extends 'main_app.html' %}
+{% load static %}
+{% block main_app %}
+<div class="d-flex border-bottom mb-3 mt-3 justify-content-between">
+    <div class="d-flex">
+        <div class="led mb-2"></div>
+        <p class="mb-1">{{now | capfirst}}</p>
+    </div>
+</div>
+<div class="tab-content mt-2">
+    <div class="tab-pane fade show active" id="pills-ajout">
+        <div class="container">
+            <div class="card mt-2">
+              <div class="card-header">
+                  <p>
+                    <i class="bi bi-people-fill float-start"> Etudiants</i>
+                    <i class="bi bi-list-ol text-primary float-end"> Nombre total est: {{ etudiant_count }}</i>
+                  </p>
+              </div>
+              <div class="card-body">
+                  <table class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th scope="col">Prénom</th>
+                              <th scope="col">Nom</th>
+                              <th scope="col">Post-nom</th>
+                              <th scope="col">Matricule</th>
+                              <th scope="col">Téléphone</th>
+                              <th scope="col">Email</th>
+                              <th scope="col">Sex</th>
+                              <th scope="col">Promotion</th>
+                              
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for item in etudiants %}
+                          <tr>
+                              <td>{{ item.userId.username }}</td>
+                              <td>{{ item.userId.last_name }}</td>
+                              <td>{{ item.userId.first_name }}</td>
+                              <td>{{ item.number_matricule }}</td>
+                              <td>{{ item.number_phone }}</td>
+                              <td>{{ item.userId.email }}</td>
+                              <td>{{ item.sex }}</td>
+                              <td>{{ item.promotionId.name }}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock main_app %}

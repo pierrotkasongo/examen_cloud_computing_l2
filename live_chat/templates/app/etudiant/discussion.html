@@ -1,0 +1,86 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block main %}
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 fs-6 px-3" href="{% url "chatEtudiant" %}"> Live-Chat Student</a>
+    <div class="dropdown account">
+        <button class="btn dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mon compte
+        </button>
+        <ul class="dropdown-menu">
+            <li class="dropdown-item">Agent : {{request.user.username}}</li>
+            <li> <a href="{% url 'disconnect' %}" class="nav-link dropdown-item"><i class="bi bi-box-arrow-left"></i> Déconnexion</a></li>
+        </ul>
+    </div>
+    <button class="navbar-toggler position-absolute d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+                {% for objet in users %}
+                    <li class="nav-item border-bottom border-top">
+                        <a href="{% url 'discutionEtudiant' objet.id %}" class="nav-link">
+                            <i class="bi bi-person-circle"></i> {{objet.username | capfirst}} {{objet.first_name | capfirst}} {{objet.last_name | capfirst}}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            </div>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="container-fluid classe-block p-2 mb-2 mt-3">      
+                <span class='name-classe'><i class="bi bi-person-circle"></i> {{destinateur.username | capfirst}} {{destinateur.first_name | capfirst}} {{destinateur.last_name | capfirst}}</span>
+            </div>
+            <div class="messages mt-4">
+                {% for objet in messages %}
+                    {% if objet.destinateur == destinateur %}
+                    <p class="small p-3 ms-4 me-2 mb-3 rounded-3" style="background-color: #f5f6f7;">
+                        {{objet.contenu}}
+                        <span class='d-block mt-2 date'>{{objet.date_envoi}} <i class="bi bi-check2-all"></i></span>
+                        {% if objet.expediteur == request.user %}
+                        <a href="{% url 'deleteMessage' objet.id %}" class="btn-sm float-end text-secondary icon_sup">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        {% endif %}
+                    </p>
+                    {% elif objet.destinateur == request.user %}
+                    <p class="small p-3 me-3 mb-3 text-white rounded-3 bg-dark">
+                        {{objet.contenu}}
+                        <span class='d-block mt-2 date'>{{objet.date_envoi}} <i class="bi bi-check2-all"></i></span>
+                        {% if objet.expediteur == request.user %}
+                        <a href="{% url 'deleteMessage' objet.id %}" class="btn-sm float-end text-secondary icon_sup">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+           <form action="" class='form mb-5' method='post'>
+            {% csrf_token %}
+                <div class="d-flex">
+                    <textarea class="form-control mx-2" id="exampleFormControlTextarea1" rows="1" oninput="autoResize(this)"name='message'  required ></textarea>
+                    <button class='btn-env'><i class="bi bi-send"></i></button>
+                </div>
+                <script>
+                    function autoResize(element){
+                      element.style.height = "auto";
+                      element.style.height = (element.scrollHeight)+"px";
+                    }
+                </script>
+           </form>
+        </main>
+    </div>
+</div>
+<script>
+    setInterval(function() {
+      location.reload();
+    }, 30000);
+</script>
+{% endblock main %}
+    

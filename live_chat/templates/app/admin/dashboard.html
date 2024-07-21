@@ -1,0 +1,37 @@
+{% extends 'main_app.html' %}
+{% load static %}
+{% block main_app %}
+<div class="d-flex border-bottom mb-3 mt-3 justify-content-between">
+    <div class="d-flex">
+        <div class="led mb-2"></div>
+        <p class='mb-1'>{{now|capfirst}}</p>
+    </div>
+</div>
+<div class="container-fluid mb-3">
+    <div class="row">
+        <div class="col-md-6 p-1 mb-1">
+            <div class="d-flex justify-content-between p-2 dash">
+                <div>
+                    <p class="text-white mb-1">Nombre total des Promotions</p>
+                    <p class="text-white mb-1"></p>
+                 </div>
+                <div>
+                    <i class="bi bi-person-x dash-bi"><br>{{promotion_count | capfirst | default:"0" }}</i>
+                </div>
+             </div>
+        </div>
+        <div class="col-md-6 p-1 mb-1">
+            <div class="d-flex justify-content-between p-2 dash">
+                <div>
+                    <p class="text-white mb-1">Nombre total des Etudiants</p>
+                    <p class="text-white mb-1"></p>
+                </div>
+                <div>
+                    <i class="bi bi-person-plus dash-bi"><br>{{etudiant_count | capfirst | default:"0" }}</i>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+{% endblock main_app %}
+    

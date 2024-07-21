@@ -1,0 +1,97 @@
+{% extends 'main_app.html' %}
+{% load static %}
+{% block main_app %}
+<div class="d-flex border-bottom mb-3 mt-3 justify-content-between">
+    <div class="d-flex">
+        <div class="led mb-2"></div>
+        <p class="mb-1">{{now | capfirst}}</p>
+    </div>
+</div>
+<div class="tab-content mt-2">
+    <div class="tab-pane fade show active" id="pills-ajout">
+        <div class="container">
+            <div class="text-center">
+                {% if item.userId.profil %}
+                    <img alt="Profil" src="{{ item.userId.profil.url }}" class="img-thumbnail img-circle me-2" id="thumbnail">
+                {% else %}
+                    <img alt="Profil" src="{% static 'image/avatar.jpg' %}" class="img-thumbnail img-circle me-2" id="thumbnail">
+                {% endif %}
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mt-4 alert {{message.tags}} text-center message-container">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mt-2">
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="username" class="form-label">Prénom</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{item.userId.username}}">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="first_name" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{item.userId.first_name}}">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="last_name" class="form-label">Post-Nom</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{item.userId.last_name}}">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="mb-2">
+                            <label for="date" class="form-label">Date de naissance</label>
+                            <input type="date" class="form-control" id="date" name="date_birth" value="{{item.date_birth}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label for="genre" class="form-label">Séléctionner le genre</label>
+                            <input type="text" class="form-control" id="sex" name="sex" value="{{item.sex}}">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Téléphone</label>
+                            <input type="tel" class="form-control" id="phone" name="number_phone" pattern="^\+243[0-9]{9}$" minlength="13" maxlength="13" placeholder="+243XXXXXXXXX" value="{{item.number_phone}}" reqruired>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="mb-2">
+                            <label for="email" class="form-label">email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="exemple@gmail.com" value="{{item.userId.email}}">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="mb-2">
+                            <label for="address" class="form-label">Adresse</label>
+                            <input type="text" name="address" class="form-control" id="address" value="{{item.address}}">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="mb-2">
+                            <label for="promotion" class="form-label">Promotion</label>
+                            <select name="promotion" class="form-select" reqruired>
+                                {% for item in promotions %}
+                                    <option value="{{item.uid}}"  reqruired>{{item.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary w-100 mt-2" type="submit">Modifier</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_app %}
